@@ -8,6 +8,8 @@ signal time_updated(elapsed: float)
 @export var mouse_sensitivity: float = 0.003
 @export var camera_distance: float = 6.0
 @export var camera_height: float = 3.0
+@export var acceleration: float = 12.0
+@export var gravity: float = 9.8
 
 var coin_count: int = 0
 var elapsed_time: float = 0.0
@@ -34,25 +36,22 @@ func _unhandled_input(event: InputEvent) -> void:
             Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 func _physics_process(delta: float) -> void:
-    var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
     if not is_on_floor():
         velocity.y -= gravity * delta
+    elif velocity.y < 0.0:
+        velocity.y = 0.0
 
-    var input_dir := Vector2.ZERO
-    input_dir.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
-    input_dir.y = Input.get_action_strength("move_backward") - Input.get_action_strength("move_forward")
-
+    var input_vector := Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
     var direction := Vector3.ZERO
-    if input_dir.length_squared() > 0.0:
-        input_dir = input_dir.normalized()
-        var forward := -transform.basis.z
-        var right := transform.basis.x
-        direction = (forward * input_dir.y + right * input_dir.x).normalized()
-        velocity.x = direction.x * move_speed
-        velocity.z = direction.z * move_speed
+
+    if input_vector.length_squared() > 0.0:
+        direction = (transform.basis * Vector3(input_vector.x, 0, input_vector.y)).normalized()
+        var target_velocity := direction * move_speed
+        velocity.x = move_toward(velocity.x, target_velocity.x, acceleration * delta)
+        velocity.z = move_toward(velocity.z, target_velocity.z, acceleration * delta)
     else:
-        velocity.x = move_toward(velocity.x, 0, move_speed)
-        velocity.z = move_toward(velocity.z, 0, move_speed)
+        velocity.x = move_toward(velocity.x, 0.0, acceleration * delta)
+        velocity.z = move_toward(velocity.z, 0.0, acceleration * delta)
 
     if is_on_floor() and Input.is_action_just_pressed("jump"):
         velocity.y = jump_velocity

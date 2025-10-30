@@ -24,3 +24,9 @@ ui/
 ```
 
 Abre el proyecto en Godot 4.5 seleccionando `project.godot` como archivo de proyecto.
+
+## Controles
+
+- **Movimiento**: WASD o flechas direccionales / stick izquierdo del mando.
+- **Saltar**: Barra espaciadora o botón inferior del mando.
+- **Girar cámara**: Mueve el ratón. Haz clic derecho para liberar/capturar el cursor.
