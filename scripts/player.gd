@@ -1,3 +1,5 @@
+class_name PlayerCharacter
+
 extends CharacterBody3D
 
 signal coin_collected(total: int)
@@ -27,7 +29,9 @@ func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventMouseMotion:
         _yaw -= event.relative.x * mouse_sensitivity
         _yaw = wrapf(_yaw, -PI, PI)
-        rotation.y = _yaw
+        var new_rotation := rotation
+        new_rotation.y = _yaw
+        rotation = new_rotation
         _update_camera_transform()
     elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
         if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
@@ -45,7 +49,7 @@ func _physics_process(delta: float) -> void:
     var direction := Vector3.ZERO
 
     if input_vector.length_squared() > 0.0:
-        direction = (transform.basis * Vector3(input_vector.x, 0, input_vector.y)).normalized()
+        direction = (transform.basis * Vector3(input_vector.x, 0, -input_vector.y)).normalized()
         var target_velocity := direction * move_speed
         velocity.x = move_toward(velocity.x, target_velocity.x, acceleration * delta)
         velocity.z = move_toward(velocity.z, target_velocity.z, acceleration * delta)
@@ -68,7 +72,7 @@ func add_coin() -> void:
     emit_signal("coin_collected", coin_count)
 
 func _update_camera_transform() -> void:
-    camera_pivot.translation = Vector3(0, camera_height, 0)
+    camera_pivot.position = Vector3(0, camera_height, 0)
     var offset := Vector3(0, 0, camera_distance)
-    camera.translation = offset
-    camera.look_at(global_transform.origin + Vector3.UP * camera_height, Vector3.UP)
+    camera.position = offset
+    camera.look_at(global_position + Vector3.UP * camera_height, Vector3.UP)

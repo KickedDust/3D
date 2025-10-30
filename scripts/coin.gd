@@ -1,3 +1,5 @@
+class_name Coin
+
 extends Area3D
 
 @export var rotation_speed: float = 90.0

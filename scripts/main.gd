@@ -1,7 +1,7 @@
 extends Node3D
 
-@onready var player: CharacterBody3D = $Player
-@onready var hud: CanvasLayer = $HUD
+@onready var player: PlayerCharacter = $Player
+@onready var hud: HUD = $HUD
 
 func _ready() -> void:
     player.coin_collected.connect(_on_coin_collected)

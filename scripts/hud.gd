@@ -1,3 +1,5 @@
+class_name HUD
+
 extends CanvasLayer
 
 @onready var coin_label: Label = $Control/MarginContainer/VBoxContainer/CoinLabel
