@@ -1,0 +1,126 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/items/Coin.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://ui/HUD.tscn" id="4"]
+
+[sub_resource type="Environment" id="Environment_y0p51"]
+background_mode = 2
+background_color = Color(0.529412, 0.807843, 0.921569, 1.0)
+ambient_light_source = 1
+ambient_light_color = Color(0.94902, 0.94902, 0.94902, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh3D_ground"]
+size = Vector3(12, 1, 12)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ground"]
+albedo_color = Color(0.388235, 0.784314, 0.47451, 1)
+roughness = 0.7
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ground"]
+size = Vector3(12, 1, 12)
+
+[sub_resource type="BoxMesh" id="BoxMesh3D_platform"]
+size = Vector3(4, 0.6, 4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_platform"]
+albedo_color = Color(0.776471, 0.705882, 0.545098, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_platform"]
+size = Vector3(4, 0.6, 4)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_fall"]
+plane = Plane(0, 1, 0, 10)
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_y0p51")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.707107, -0.5, 0.5, 0.0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 4, 0)
+shadow_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Platforms" type="Node3D" parent="."]
+
+[node name="Ground" type="StaticBody3D" parent="Platforms"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Ground"]
+shape = SubResource("BoxShape3D_ground")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Ground"]
+mesh = SubResource("BoxMesh3D_ground")
+material_override = SubResource("StandardMaterial3D_ground")
+
+[node name="Platform1" type="StaticBody3D" parent="Platforms"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 1, -4)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform1"]
+shape = SubResource("BoxShape3D_platform")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform1"]
+mesh = SubResource("BoxMesh3D_platform")
+material_override = SubResource("StandardMaterial3D_platform")
+
+[node name="Platform2" type="StaticBody3D" parent="Platforms"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 2.5, -2)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform2"]
+shape = SubResource("BoxShape3D_platform")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform2"]
+mesh = SubResource("BoxMesh3D_platform")
+material_override = SubResource("StandardMaterial3D_platform")
+
+[node name="Platform3" type="StaticBody3D" parent="Platforms"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 3.5, 4)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform3"]
+shape = SubResource("BoxShape3D_platform")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform3"]
+mesh = SubResource("BoxMesh3D_platform")
+material_override = SubResource("StandardMaterial3D_platform")
+
+[node name="Platform4" type="StaticBody3D" parent="Platforms"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 4.5, 6)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Platforms/Platform4"]
+shape = SubResource("BoxShape3D_platform")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Platforms/Platform4"]
+mesh = SubResource("BoxMesh3D_platform")
+material_override = SubResource("StandardMaterial3D_platform")
+
+[node name="FallBoundary" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FallBoundary"]
+shape = SubResource("WorldBoundaryShape3D_fall")
+
+[node name="Coins" type="Node3D" parent="."]
+
+[node name="Coin1" parent="Coins" instance=ExtResource("3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1.5, -2)
+
+[node name="Coin2" parent="Coins" instance=ExtResource("3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.5, 2)
+
+[node name="Coin3" parent="Coins" instance=ExtResource("3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 2.5, -4)
+
+[node name="Coin4" parent="Coins" instance=ExtResource("3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 3.5, -2)
+
+[node name="Coin5" parent="Coins" instance=ExtResource("3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 4.5, 4)
+
+[node name="Coin6" parent="Coins" instance=ExtResource("3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 5.5, 6)
+
+[node name="HUD" parent="." instance=ExtResource("4")]
