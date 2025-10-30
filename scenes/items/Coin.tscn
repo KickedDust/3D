@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/coin.gd" id="1"]
+
+[sub_resource type="SphereMesh" id="SphereMesh3D_h3s6z"]
+radial_segments = 32
+rings = 16
+radius = 0.35
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y54p2"]
+albedo_color = Color(0.952941, 0.784314, 0.203922, 1)
+metallic = 0.8
+roughness = 0.2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_1n9p0"]
+radius = 0.4
+
+[node name="Coin" type="Area3D"]
+script = ExtResource("1")
+collision_layer = 2
+collision_mask = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_1n9p0")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh3D_h3s6z")
+material_override = SubResource("StandardMaterial3D_y54p2")
